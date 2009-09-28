@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Process>
+  <Run ticks="10000" skip="2000">
+  </Run>
+  <WorkItems>
+    <SizeDistribution type="Deterministic" value="1" />
+  </WorkItems>
+  <WorkStations>
+    <WorkStation name="Analysis" wipLimitId="AnalysisWip">
+      <Processor id="A">
+        <ProcessingTime type="GammaDistribution" shape="" scale="" />
+      </Processor>
+      <Processor id="B">
+        <ProcessingTime type="GammaDistribution" shape="" scale="" />
+      </Processor>
+      <Processor id="C">
+        <ProcessingTime type="GammaDistribution" shape="" scale="" />
+      </Processor>
+    </WorkStation>
+    <WorkStation name="Development" wipLimitId="DevelopmentWip">
+      <Processor id="A">
+        <ProcessingTime type="GammaDistribution" shape="" scale="" />
+      </Processor>
+      <Processor id="B">
+        <ProcessingTime type="GammaDistribution" shape="" scale="" />
+      </Processor>
+      <Processor id="C">
+        <ProcessingTime type="GammaDistribution" shape="" scale="" />
+      </Processor>
+    </WorkStation>
+    <WipLimits>
+      <WipLimit id="AnalysisWip" value="2"/>
+      <WipLimit id="DevelopmentWip" value="4"/>
+      <WipLimit id="TestWip" value="1"/>
+    </WipLimits>
+  </WorkStations>
+</Process>
