@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonteCarloFlow", "MonteCarloFlow\MonteCarloFlow.csproj", "{E5239B6D-A2F1-4E28-AF8E-EC09B9CF86A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonteCarloFlowTest", "MonteCarloFlowTest\MonteCarloFlowTest.csproj", "{9C86FC22-B5AC-462F-840B-3C120D49B8CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{07BA2C83-32EE-4E28-AD67-3D90B20E6535}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		MonteCarloFlow.vsmdi = MonteCarloFlow.vsmdi
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "Flow\Flow.csproj", "{B24F18C7-4F52-49E8-B9CE-C74FF3C113B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GammaFit", "GammaFit\GammaFit.csproj", "{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = MonteCarloFlow.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5239B6D-A2F1-4E28-AF8E-EC09B9CF86A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5239B6D-A2F1-4E28-AF8E-EC09B9CF86A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5239B6D-A2F1-4E28-AF8E-EC09B9CF86A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5239B6D-A2F1-4E28-AF8E-EC09B9CF86A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C86FC22-B5AC-462F-840B-3C120D49B8CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C86FC22-B5AC-462F-840B-3C120D49B8CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C86FC22-B5AC-462F-840B-3C120D49B8CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C86FC22-B5AC-462F-840B-3C120D49B8CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B24F18C7-4F52-49E8-B9CE-C74FF3C113B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B24F18C7-4F52-49E8-B9CE-C74FF3C113B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B24F18C7-4F52-49E8-B9CE-C74FF3C113B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B24F18C7-4F52-49E8-B9CE-C74FF3C113B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
