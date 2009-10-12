@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Assemblies Version="805306377">
+  <Assembly Name="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" Image="31c15a98-7289-42c3-ac3d-f18ede9864b8" Timestamp="633530215220000000" />
+  <Assembly Name="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Image="22109d11-0cd1-4771-821a-eda71ecf7456" Timestamp="633529644480000000" XmlDocIndexTimestamp="633489967300000000" />
+  <Assembly Name="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Image="da087a5d-0ad5-45cb-86dd-35c5a1f0985e" Timestamp="633529644480000000" XmlDocIndexTimestamp="633489967300000000" />
+  <Assembly Name="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Image="b5e20d02-8124-4536-aea5-864996e554c5" Timestamp="633529644480000000" XmlDocIndexTimestamp="633489967300000000" />
+  <Assembly Name="Spring.Core, Version=1.1.2.20125, Culture=neutral, PublicKeyToken=65e474d141e25e07" Image="f8b922f1-c24f-482c-b946-a29f5aa4b19f" Timestamp="633754002176978603" />
+  <Assembly Name="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" Image="b813916e-e3a5-4dfd-9302-ef8e6d0ad65c" Timestamp="633754002175409483" />
+  <Assembly Name="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07" Image="3d1a9847-ca4c-4ba4-8880-466f7d1ec68b" Timestamp="633754002168034619" />
+  <Assembly Name="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null" Image="e425affe-5dc9-4557-a5c4-881be2f801c6" Timestamp="633754002144968555" />
+</Assemblies>

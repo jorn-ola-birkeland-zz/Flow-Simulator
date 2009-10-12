@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+  <object id="process" type="Flow.WorkProcess, Flow">
+    <constructor-arg name="backlog" ref="backlog"/>
+    <constructor-arg name="workStations">
+      <list element-type="Flow.WorkStation, Flow">
+        <ref object="ws1"/>
+      </list>
+    </constructor-arg>
+  </object>
+  <object id="backlog" type="Flow.RandomSizeInfiniteBacklog, Flow">
+    <constructor-arg name="distribution" ref="backlogdist"/>
+  </object>
+  <object id="backlogdist" type="Flow.ProbabilityDistribution.DeterministicDistribution, Flow">
+    <constructor-arg name="value" value="2"/>
+  </object>
+  <object id="ws1" type="Flow.WorkStation, Flow">
+    <constructor-arg name="wipLimit" ref="wip1"/>
+    <constructor-arg name="machines">
+      <list element-type="Flow.Machine, Flow">
+        <ref object="machine1"/>
+      </list>
+    </constructor-arg>
+  </object>
+  <object id="wip1" type="Flow.WipTokenPool, Flow">
+    <constructor-arg name="tokenCount" value="2"/>
+  </object>
+
+  <object id="machine1" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="m1dist"/>
+    <constructor-arg name="resourcePool" ref="rp1"/>
+  </object>
+
+
+  <object id="rp1" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+
+  <object id="m1dist" type="Flow.ProbabilityDistribution.GammaDistribution, Flow" factory-method="FromScale">
+    <constructor-arg name="k" value="0.981"/>
+    <constructor-arg name="theta" value="78.41"/>
+    <property name="Seed" value="1"/>
+  </object>
+
+</objects>

@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+  <object id="process" type="Flow.WorkProcess, Flow">
+    <constructor-arg name="backlog" ref="backlog"/>
+    <constructor-arg name="workStations">
+      <list element-type="Flow.WorkStation, Flow">
+        <ref object="ws1"/>
+        <ref object="ws2"/>
+        <ref object="ws3"/>
+      </list>
+    </constructor-arg>
+  </object>
+  <object id="backlog" type="Flow.RandomSizeInfiniteBacklog, Flow">
+    <constructor-arg name="distribution" ref="backlogdist"/>
+  </object>
+  <object id="backlogdist" type="Flow.ProbabilityDistribution.DeterministicDistribution, Flow">
+    <constructor-arg name="value" value="1"/>
+  </object>
+  <object id="ws1" type="Flow.WorkStation, Flow">
+    <constructor-arg name="wipLimit" ref="wip1"/>
+    <constructor-arg name="machines">
+      <list element-type="Flow.Machine, Flow">
+        <ref object="analyst1"/>
+        <ref object="analyst2"/>
+      </list>
+    </constructor-arg>
+  </object>
+  <object id="ws2" type="Flow.WorkStation, Flow">
+    <constructor-arg name="wipLimit" ref="wip2"/>
+    <constructor-arg name="machines">
+      <list element-type="Flow.Machine, Flow">
+        <ref object="dev1"/>
+        <ref object="dev2"/>
+        <ref object="dev3"/>
+        <ref object="dev4"/>
+      </list>
+    </constructor-arg>
+  </object>
+  <object id="ws3" type="Flow.WorkStation, Flow">
+    <constructor-arg name="wipLimit" ref="wip3"/>
+    <constructor-arg name="machines">
+      <list element-type="Flow.Machine, Flow">
+        <ref object="test1"/>
+      </list>
+    </constructor-arg>
+  </object>
+
+  <object id="wip1" type="Flow.WipTokenPool, Flow">
+    <constructor-arg name="tokenCount" value="2"/>
+  </object>
+  <object id="wip2" type="Flow.WipTokenPool, Flow">
+    <constructor-arg name="tokenCount" value="4"/>
+  </object>
+  <object id="wip3" type="Flow.WipTokenPool, Flow">
+    <constructor-arg name="tokenCount" value="1"/>
+  </object>
+
+  <object id="analyst1" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="analyst1_dist"/>
+    <constructor-arg name="resourcePool" ref="analyst1_rp"/>
+  </object>
+  <object id="analyst2" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="analyst2_dist"/>
+    <constructor-arg name="resourcePool" ref="analyst2_rp"/>
+  </object>
+  <object id="dev1" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="dev1_dist"/>
+    <constructor-arg name="resourcePool" ref="dev1_rp"/>
+  </object>
+  <object id="dev2" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="dev2_dist"/>
+    <constructor-arg name="resourcePool" ref="dev2_rp"/>
+  </object>
+  <object id="dev3" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="dev3_dist"/>
+    <constructor-arg name="resourcePool" ref="dev3_rp"/>
+  </object>
+  <object id="dev4" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="dev4_dist"/>
+    <constructor-arg name="resourcePool" ref="dev4_rp"/>
+  </object>
+  <object id="test1" type="Flow.Machine, Flow">
+    <constructor-arg name="distribution" ref="test1_dist"/>
+    <constructor-arg name="resourcePool" ref="test1_rp"/>
+  </object>
+
+  <object id="analyst1_rp" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+  <object id="analyst2_rp" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+    <object id="dev1_rp" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+  <object id="dev2_rp" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+  <object id="dev3_rp" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+  <object id="dev4_rp" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+  <object id="test1_rp" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+  </object>
+
+  <object id="analyst1_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">
+    <constructor-arg name="expectedValue" value="20"/>
+    <property name="Seed" value="1"/>
+  </object>
+  <object id="analyst2_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">
+    <constructor-arg name="expectedValue" value="20"/>
+    <property name="Seed" value="2"/>
+  </object>
+  <object id="dev1_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">
+    <constructor-arg name="expectedValue" value="40"/>
+    <property name="Seed" value="3"/>
+  </object>
+  <object id="dev2_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">
+    <constructor-arg name="expectedValue" value="40"/>
+    <property name="Seed" value="4"/>
+  </object>
+  <object id="dev3_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">
+    <constructor-arg name="expectedValue" value="40"/>
+    <property name="Seed" value="5"/>
+  </object>
+  <object id="dev4_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">
+    <constructor-arg name="expectedValue" value="40"/>
+    <property name="Seed" value="6"/>
+  </object>
+  <object id="test1_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">
+    <constructor-arg name="expectedValue" value="10"/>
+    <property name="Seed" value="7"/>
+  </object>
+</objects>
