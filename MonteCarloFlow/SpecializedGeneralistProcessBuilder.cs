@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using MonteCarloFlowTest;
+using Flow;
+using Flow.ProbabilityDistribution;
 
 namespace MonteCarloFlow
 {
@@ -10,7 +11,7 @@ namespace MonteCarloFlow
             get { return string.Format("{0} specialized generalist(s). Random processing times",TeamSize); }
         }
 
-        protected override void BuildWorkstations(IWorkProcess process)
+        protected override void BuildWorkstations(WorkProcess process)
         {
             List<ResourcePool> teamMembers = new List<ResourcePool>();
  
@@ -29,7 +30,8 @@ namespace MonteCarloFlow
   
                 for(int machineIndex=0;machineIndex<TeamSize; machineIndex++)
                 {
-                    process[workstationIndex].AddMachine(new PooledMachine(ErlangDistribution.FromExpectedValue(ud.NextValue(), 5), teamMembers[machineIndex]));
+                    //process[workstationIndex].AddMachine(new Machine(ErlangDistribution.FromExpectedValue(ud.NextValue(), 5), teamMembers[machineIndex]));
+                    process[workstationIndex].AddMachine(new Machine(ExponentialDistribution.FromExpectedValue(ud.NextValue(), Seed+workstationIndex), teamMembers[machineIndex]));
                 }
             }
         }

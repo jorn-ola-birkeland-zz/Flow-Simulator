@@ -31,5 +31,9 @@ namespace MonteCarloFlow
             }
         }
 
+        public override double ExpectedValue
+        {
+            get { return (_upper - _lower)/2; }
+        }
     }
 }

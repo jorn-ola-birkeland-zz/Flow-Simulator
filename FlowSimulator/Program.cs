@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Flow;
 using MonteCarloFlow;
 using MonteCarloFlowTest;
 using Spring.Context;
 using Spring.Context.Support;
 using System.Linq;
+using Wintellect.PowerCollections;
+using System.Threading;
 
 
 namespace FlowSimulator
@@ -14,6 +17,9 @@ namespace FlowSimulator
     {
         private static void Main(string[] args)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
+
             string path = args[0];
 
             IApplicationContext context = new XmlApplicationContext(path);
@@ -24,56 +30,91 @@ namespace FlowSimulator
 
             List<WorkItem> workItems = new List<WorkItem>(process.CompletedWorktems);
 
-            List<WorkItem> filteredWorkItems = workItems.FindAll(wi => wi.StartTime > 25000 && wi.EndTime <= 200000);
-            List<WipEntry> filteredWipEntries = process.WipEntries.FindAll(we => we.TimeStamp > 25000 && we.TimeStamp <= 200000);
+
+            IEnumerable<WorkItem> filteredWorkItems = process.CompletedWorktems.Where(wi => wi.StartTime > 25000);
+            IEnumerable<WipEntry> filteredWipEntries = process.WipEntries.Where(we => we.TimeStamp > 25000);
+            IEnumerable<UtilizationEntry> filteredUtilizationEntries = process.UtilizationEntries.Where(ue => ue.TimeStamp > 25000);
 
 
             FlowMetrics metrics = FlowMetrics.CalculateMetrics(filteredWorkItems);
-            double wipAvg = CalculateAverageWip(filteredWipEntries);
-            double wipStdDev = CalculateWipStdDev(filteredWipEntries, wipAvg);
+            WriteMetrics(metrics);
+            WriteWip(filteredWipEntries);
+            WriteUtilization(filteredUtilizationEntries);
 
-            Console.WriteLine("{0}|{1:F6}|{2:F3}|{3:F3}|{4:F3}|{5:F2}|{6:F2} ", "Test process",
-                              metrics.AverageThroughput,
-                              metrics.AverageCycleTime, metrics.AverageWip, metrics.CycleTimeStdDev, wipAvg, wipStdDev);
 
-            CreateHistogram(filteredWorkItems.ConvertAll(wi => (double)wi.CycleTime),50);
-            CreateHistogram(filteredWipEntries.ConvertAll(wip => (double)wip.Wip), 1);
+            string title = "Cycle time histogram";
+            Console.WriteLine();
+            Console.WriteLine(title);
+            CreateHistogram(filteredWorkItems, wi => wi.CycleTime,50);
+
+            Console.WriteLine();
+            Console.WriteLine("WIP histogram");
+            CreateHistogram(filteredWipEntries,wip => wip.Wip, 1);
+
+            WriteResourceUtilization(filteredUtilizationEntries);
         }
 
-        private static double CalculateWipStdDev(ICollection<WipEntry> entries, double avg)
+        private static void WriteUtilization(IEnumerable<UtilizationEntry> utilizationEntries)
         {
-            double variance = 0;
-            foreach (WipEntry wipEntry in entries)
-            {
-                double diff = wipEntry.Wip - avg;
-                double diffSquared = Math.Pow(diff, 2);
+            double utilAvg = utilizationEntries.Average(ue => ue.Utilization);
+            double utilStdDev = utilizationEntries.StandardDeviation(ue => ue.Utilization);
 
-                variance += diffSquared / entries.Count;
-            }
-
-            return  Math.Sqrt(variance);
-
+            Console.WriteLine("Avg. utilization:   {0:###.00%}", utilAvg);
+            Console.WriteLine("Util. std.dev.:     {0}", utilStdDev);
         }
 
-        private static double CalculateAverageWip(ICollection<WipEntry> wipEntries)
+
+        private static void WriteResourceUtilization(IEnumerable<UtilizationEntry> entries)
         {
-            double sum=0;
-            foreach (WipEntry entry in wipEntries)
-            {
-                sum += entry.Wip;
-            }
+            MultiDictionary<string, double> utilizationEntries = GroupUtilizationEntries(entries);
 
-            return sum/wipEntries.Count;
+            foreach (string key in utilizationEntries.Keys.OrderBy(key => key))
+            {
+                Console.WriteLine();
+                Console.WriteLine(key);
+                Console.WriteLine("Avg. utilization: {0:###.00%}", utilizationEntries[key].Average(d => d));
+                //Console.WriteLine("Utilization std.dev.: {0}", utilizationEntries[key].StandardDeviation(d => d));
+            }
         }
 
-        private static void CreateHistogram(ICollection<double> values, double incrementSize)
+        private static MultiDictionary<string, double> GroupUtilizationEntries(IEnumerable<UtilizationEntry> entries)
+        {
+            MultiDictionary<string, double> utilizationEntries = new MultiDictionary<string, double>(true);
+            foreach (UtilizationEntry entry in entries)
+            {
+                utilizationEntries.Add(entry.ResourcePoolName, entry.Utilization);
+            }
+            return utilizationEntries;
+        }
+
+        private static void WriteWip(IEnumerable<WipEntry> filteredWipEntries)
+        {
+            double wipAvg = filteredWipEntries.Average(wipEntry => wipEntry.Wip);
+            double wipStdDev = filteredWipEntries.StandardDeviation(wipEntry => wipEntry.Wip);
+
+            Console.WriteLine("Avg. WIP:           {0}", wipAvg);
+            Console.WriteLine("WIP std.dev.:       {0}", wipStdDev);
+        }
+
+        private static void WriteMetrics(FlowMetrics metrics)
+        {
+            Console.WriteLine("Avg. throughput:    {0}", metrics.AverageThroughput);
+            Console.WriteLine("Avg. cycle time:    {0}", metrics.AverageCycleTime);
+            Console.WriteLine("Calculated WIP:     {0}", metrics.AverageWip);
+            Console.WriteLine("Cycle time std.dev: {0}", metrics.CycleTimeStdDev);
+        }
+
+        private static void CreateHistogram<T>(IEnumerable<T> values, Converter<T,double> toDouble,  double incrementSize)
         {
             Dictionary<double,int> categories = new Dictionary<double, int>();
             double maxCategory = 0;
+            int total = 0;
 
-            foreach (double value in values)
+
+            foreach (T value in values)
             {
-                double category = Math.Floor(value/incrementSize);
+                total++;
+                double category = Math.Floor(toDouble(value)/incrementSize);
                 maxCategory = category > maxCategory ? category : maxCategory;
 
                 if(!categories.ContainsKey(category))
@@ -89,7 +130,7 @@ namespace FlowSimulator
             for(double i=0;i<maxCategory+1;i++)
             {
                 double count = categories.ContainsKey(i) ? categories[i] : 0;
-                Console.WriteLine("[{0:F0}-{1:F0}>:{2}({3:F2}%)", i*incrementSize,(i+1)*incrementSize, count, count/values.Count);
+                Console.WriteLine("[{0:F0}-{1:F0}>: {2} ({3:F2}%)", i*incrementSize,(i+1)*incrementSize, count, count/total*100);
             }
         }
     }

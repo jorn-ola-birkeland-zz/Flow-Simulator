@@ -7,13 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonteCarloFlowTest", "Monte
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{07BA2C83-32EE-4E28-AD67-3D90B20E6535}"
 	ProjectSection(SolutionItems) = preProject
+		Lib\antlr.runtime.dll = Lib\antlr.runtime.dll
+		Lib\Common.Logging.dll = Lib\Common.Logging.dll
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		MonteCarloFlow.vsmdi = MonteCarloFlow.vsmdi
+		Lib\Spring.Core.dll = Lib\Spring.Core.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flow", "Flow\Flow.csproj", "{B24F18C7-4F52-49E8-B9CE-C74FF3C113B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GammaFit", "GammaFit\GammaFit.csproj", "{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowSimulator", "FlowSimulator\FlowSimulator.csproj", "{105523E2-E7EF-4955-A392-A65F060BCF9D}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -40,6 +45,10 @@ Global
 		{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CBBA854-3B20-4E87-B5A8-ABC9833D4178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{105523E2-E7EF-4955-A392-A65F060BCF9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{105523E2-E7EF-4955-A392-A65F060BCF9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{105523E2-E7EF-4955-A392-A65F060BCF9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{105523E2-E7EF-4955-A392-A65F060BCF9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

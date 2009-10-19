@@ -14,6 +14,16 @@ namespace Flow.ProbabilityDistribution
         private readonly double _A;
         private readonly double _B;
 
+        public static GammaDistribution FromScale(double k, double theta)
+        {
+            return new GammaDistribution(k, theta);
+        }
+
+        public static GammaDistribution FromRate(double alpha, double beta)
+        {
+            return new GammaDistribution(alpha, 1 / beta);
+        }
+
         public GammaDistribution(double k, double theta)
         {
             _k = k;
@@ -50,14 +60,9 @@ namespace Flow.ProbabilityDistribution
             }
         }
 
-        public static GammaDistribution FromScale(double k, double theta)
+        public override double ExpectedValue
         {
-            return new GammaDistribution(k, theta);
-        }
-
-        public static GammaDistribution FromRate(double alpha, double beta)
-        {
-            return new GammaDistribution(alpha, 1/beta);
+            get { return _k*_theta; }
         }
 
         private double CalculateLnOfUniformProducts(Random rnd)

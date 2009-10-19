@@ -1,34 +1,55 @@
 using System;
 using System.Collections.Generic;
+using Flow;
+using MonteCarloFlowTest;
+using Wintellect.PowerCollections;
 
-namespace MonteCarloFlowTest
+namespace Flow
 {
-    public class WorkInProcessLimit
+    internal interface IWorkItemStack
     {
-        private readonly int _wipLimit;
-
-
-        public WorkInProcessLimit(int wipLimit)
-        {
-            _wipLimit = wipLimit;
-        }
-
-        public int WipLimitValue
-        {
-            get { return _wipLimit;  }
-        }
+        WorkItem Pop();
+        void Push(WorkItem workItem);
     }
 
-    public class WorkStation : IWorkStation
+    public class WorkStation : IWorkStation, IWorkItemStack
     {
-        private readonly List<IMachine> _machines = new List<IMachine>();
-        private readonly Queue<WorkItem> _completedJobs = new Queue<WorkItem>();
-        private readonly WorkInProcessLimit _wipLimit;
+        private class WorkItemTransition : IWorkItemTransition
+        {
+            private readonly IWorkItemStack _workItemStack;
+            private readonly WorkItem _workItem;
+
+            public WorkItemTransition(IWorkItemStack workItemStack)
+            {
+                _workItemStack = workItemStack;
+                _workItem = _workItemStack.Pop();
+            }
+
+            public WorkItem Commit()
+            {
+                return _workItem;
+            }
+
+            public void Rollback()
+            {
+                _workItemStack.Push(_workItem);
+            }
+        }
 
 
-        public WorkStation(WorkInProcessLimit wipLimit)
+        private readonly IList<Machine> _machines;
+        private readonly IList<WorkItem> _completedJobs = new List<WorkItem>();
+        private readonly WipTokenPool _wipLimit;
+
+        public WorkStation(WipTokenPool wipLimit) : this(wipLimit, new List<Machine>())
         {
             _wipLimit = wipLimit;
+        }
+
+        public WorkStation(WipTokenPool wipLimit, IList<Machine> machines)
+        {
+            _wipLimit = wipLimit;
+            _machines = machines;
         }
 
         public int WorkInProcess
@@ -36,7 +57,7 @@ namespace MonteCarloFlowTest
             get
             {
                 int wip = _completedJobs.Count;
-                foreach (IMachine machine in _machines)
+                foreach (Machine machine in _machines)
                 {
                     if (machine.IsProcessing)
                     {
@@ -47,19 +68,49 @@ namespace MonteCarloFlowTest
             }
         }
 
-        public bool HasCapacity
-        {
-            get { return ExistIdleMachine; }
-        }
 
         public bool HasFinishedJobs
         {
             get { return _completedJobs.Count > 0; }
         }
 
-        public WorkItem RemoveFirstFinishedJob()
+        public IWorkItemTransition BeginWorkItemTransition()
         {
-            return _completedJobs.Dequeue();
+            return new WorkItemTransition(this);
+        }
+
+        public bool TryAddWorkItem(IWorkItemTransition workItemTransition)
+        {
+            if (ExistIdleMachine && _wipLimit.LockWipToken())
+            {
+                WorkItem workItem = workItemTransition.Commit();
+                AddJob(workItem);
+                return true;
+            }
+            else
+            {
+                workItemTransition.Rollback();
+                return false;
+            }
+        }
+
+        WorkItem IWorkItemStack.Pop()
+        {
+            return RemoveFirstFinishedJob();
+        }
+
+        void IWorkItemStack.Push(WorkItem workItem)
+        {
+            _wipLimit.LockWipToken();
+            _completedJobs.Insert(0, workItem);
+        }
+
+        private WorkItem RemoveFirstFinishedJob()
+        {
+            _wipLimit.UnlockWipToken();
+            WorkItem wi = _completedJobs[0];
+            _completedJobs.RemoveAt(0);
+            return wi;
         }
 
         public int InProcessCount
@@ -67,7 +118,7 @@ namespace MonteCarloFlowTest
             get
             {
                 int wip = 0;
-                foreach (IMachine machine in _machines)
+                foreach (Machine machine in _machines)
                 {
                     if (machine.IsProcessing)
                     {
@@ -80,13 +131,10 @@ namespace MonteCarloFlowTest
 
         public int CompletionQueueCount
         {
-            get
-            {
-                return _completedJobs.Count;
-            }
+            get { return _completedJobs.Count; }
         }
 
-        public void AddMachine(IMachine machine)
+        public void AddMachine(Machine machine)
         {
             _machines.Add(machine);
         }
@@ -98,36 +146,51 @@ namespace MonteCarloFlowTest
                 job.Tick();
             }
 
-            foreach (IMachine machine in _machines)
+            foreach (Machine machine in _machines)
             {
                 machine.Tick();
                 if (machine.HasCompletedJob)
                 {
-                    _completedJobs.Enqueue(machine.RemoveCompletedJob());
+                    _completedJobs.Add(machine.RemoveCompletedJob());
                 }
             }
-
         }
 
-        public void AddJob(WorkItem workItem)
+        private void AddJob(WorkItem workItem)
         {
-            foreach (IMachine machine in _machines)
+            Machine fastestMachine = GetFastestMachine();
+
+            if (fastestMachine != null)
+            {
+                fastestMachine.StartJob(workItem);
+            }
+            else
+            {
+                throw new InvalidOperationException("Trying to add workItem when there are no idle machines");
+            }
+        }
+
+        private Machine GetFastestMachine()
+        {
+            Machine fastestMachine = null;
+            foreach (Machine machine in _machines)
             {
                 if (machine.IsIdle)
                 {
-                    machine.StartJob(workItem);
-                    return;
+                    if (fastestMachine == null || machine.ExpectedProcessingTime < fastestMachine.ExpectedProcessingTime)
+                    {
+                        fastestMachine = machine;
+                    }
                 }
             }
-
-            throw new InvalidOperationException("Trying to add workItem when there are no idle machines");
+            return fastestMachine;
         }
 
         private bool ExistIdleMachine
         {
             get
             {
-                foreach (IMachine machine in _machines)
+                foreach (Machine machine in _machines)
                 {
                     if (machine.IsIdle)
                     {
@@ -138,26 +201,18 @@ namespace MonteCarloFlowTest
             }
         }
 
-        public Queue<WorkItem> CompletionQueue
+        public Set<ResourcePool> ResourcePools
         {
-            get { return _completedJobs; }
-        }
-
-        public void Stop()
-        {
-            foreach (IMachine machine in _machines)
+            get
             {
-                machine.Stop();
-            }
-        }
+                Set<ResourcePool> _resourcePools = new Set<ResourcePool>();
+                foreach (Machine machine in _machines)
+                {
+                    _resourcePools.Add(machine.ResourcePool);
+                }
 
-        public void Start()
-        {
-            foreach (IMachine machine in _machines)
-            {
-                machine.Start();
+                return _resourcePools;
             }
-
         }
 
         public double AverageUtilization
@@ -166,7 +221,7 @@ namespace MonteCarloFlowTest
             {
                 double sum = 0;
 
-                foreach (IMachine machine in _machines)
+                foreach (Machine machine in _machines)
                 {
                     sum += machine.Utilization;
                 }
@@ -175,12 +230,9 @@ namespace MonteCarloFlowTest
             }
         }
 
-        public IEnumerable<IMachine> Machines
+        public IEnumerable<Machine> Machines
         {
-            get
-            {
-                return _machines;
-            }
+            get { return _machines; }
         }
     }
 }

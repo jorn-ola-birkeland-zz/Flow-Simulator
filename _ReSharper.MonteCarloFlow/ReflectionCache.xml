@@ -8,4 +8,5 @@
   <Assembly Name="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" Image="b813916e-e3a5-4dfd-9302-ef8e6d0ad65c" Timestamp="633754002175409483" />
   <Assembly Name="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07" Image="3d1a9847-ca4c-4ba4-8880-466f7d1ec68b" Timestamp="633754002168034619" />
   <Assembly Name="PowerCollections, Version=1.0.2141.24679, Culture=neutral, PublicKeyToken=null" Image="e425affe-5dc9-4557-a5c4-881be2f801c6" Timestamp="633754002144968555" />
+  <Assembly Name="PowerCollections, Version=1.0.2141.24679, Culture=neutral" Image="d554e521-0557-48dc-854c-9d76315bdbf6" Timestamp="633754002144968555" />
 </Assemblies>

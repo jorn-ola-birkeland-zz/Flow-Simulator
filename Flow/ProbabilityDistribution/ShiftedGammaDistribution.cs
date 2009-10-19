@@ -1,5 +1,5 @@
 ﻿using System;
-using MonteCarloFlowTest;
+
 namespace Flow.ProbabilityDistribution
 {
     public class ShiftedGammaDistribution : IProbabilityDistribution
@@ -21,6 +21,11 @@ namespace Flow.ProbabilityDistribution
         {
             get { return _gamma.Seed;  }
             set { _gamma.Seed = value; }
+        }
+
+        public double ExpectedValue
+        {
+            get { return _gamma.ExpectedValue+_shift; }
         }
 
         public static ShiftedGammaDistribution FromLeftAndModeAndMean(double leftMostValue, double mode, double mean)

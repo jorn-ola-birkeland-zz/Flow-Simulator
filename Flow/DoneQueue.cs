@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Flow;
+using Wintellect.PowerCollections;
 
 namespace MonteCarloFlowTest
 {
@@ -9,11 +11,6 @@ namespace MonteCarloFlowTest
 
         public void Tick()
         {
-        }
-
-        public bool HasCapacity
-        {
-            get { return true; }
         }
 
         public bool HasFinishedJobs
@@ -26,19 +23,26 @@ namespace MonteCarloFlowTest
             get { return 0; }
         }
 
+        public Set<ResourcePool> ResourcePools
+        {
+            get { return new Set<ResourcePool>(); }
+        }
+
         public int Count
         {
             get { return _jobs.Count; }
         }
 
-        public WorkItem RemoveFirstFinishedJob()
+        public IWorkItemTransition BeginWorkItemTransition()
         {
-            return _jobs.Dequeue();
+            return new WorkItemTransition(_jobs.Dequeue());
         }
 
-        public void AddJob(WorkItem workItem)
+        public bool TryAddWorkItem(IWorkItemTransition workItemTransition)
         {
-            _jobs.Enqueue(workItem);
+            _jobs.Enqueue(workItemTransition.Commit());
+
+            return true;
         }
 
         IEnumerator<WorkItem> IEnumerable<WorkItem>.GetEnumerator()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Flow;
+using Flow.ProbabilityDistribution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MonteCarloFlowTest
@@ -10,7 +11,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldRunSingleStationSingleDeterministicMachine()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
             WorkStation ws1 = new WorkStation(new WipTokenPool(4));
 
             process.Add(ws1);
@@ -30,7 +31,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForKanbanRunTwoStationSingleDeterministicMachineWorkProcess()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
             WorkStation ws1 = new WorkStation(new WipTokenPool(4));
             WorkStation ws2 = new WorkStation(new WipTokenPool(2)); // Note: Bug in SetWorkstationWipLimit below?
 
@@ -55,7 +56,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForKanbanRunTwoStationDeterministicMachineWorkProcessAndLastWorkStationWithTwoMachines()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
             WorkStation ws1 = new WorkStation(new WipTokenPool(8));
             WorkStation ws2 = new WorkStation(new WipTokenPool(8));
 
@@ -80,7 +81,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForKanbanPreventExcessWipWhenFirstStationIsFaster()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
             WorkStation ws1 = new WorkStation(new WipTokenPool(3));
             WorkStation ws2 = new WorkStation(new WipTokenPool(2));
 
@@ -106,7 +107,7 @@ namespace MonteCarloFlowTest
             FlowTestHelper.TickAndAssert(process, 0, 3, 1, 0, 4);
             FlowTestHelper.TickAndAssert(process, 1, 2, 1, 0, 5);
 
-            List<WorkItem> completed = new List<WorkItem>(process.CompletedJobs);
+            List<WorkItem> completed = new List<WorkItem>(process.CompletedWorktems);
             Assert.AreEqual(3, completed[0].CycleTime);
             Assert.AreEqual(4, completed[1].CycleTime);
             Assert.AreEqual(5, completed[2].CycleTime);
@@ -118,7 +119,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForKanbanRunThreeWorkstationProcess()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new RandomSizeInfiniteBacklog(new DeterministicDistribution(2)));
+            WorkProcess process = new WorkProcess(new RandomSizeInfiniteBacklog(new DeterministicDistribution(2)));
             WorkStation ws1 = new WorkStation(new WipTokenPool(1));
             WorkStation ws2 = new WorkStation(new WipTokenPool(3));
             WorkStation ws3 = new WorkStation(new WipTokenPool(2)); // Note: Bug in SetWorkstationWipLimit below?
@@ -150,7 +151,7 @@ namespace MonteCarloFlowTest
             FlowTestHelper.TickAndAssert(4, process, 1, 0, 3, 0, 1, 0, 1);
             //FlowTestHelper.TickAndAssert(10, process, 0, 1, 3, 0, 0, 0, 0);
 
-            //List<WorkItem> completed = new List<WorkItem>(process.CompletedJobs);
+            //List<WorkItem> completed = new List<WorkItem>(process.CompletedWorktems);
             //Assert.AreEqual(3, completed[0].CycleTime);
             //Assert.AreEqual(4, completed[1].CycleTime);
             //Assert.AreEqual(5, completed[2].CycleTime);
@@ -162,7 +163,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForConwipRunTwoStationSingleDeterministicMachineWorkProcess()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
 
             WipTokenPool wipLimit = new WipTokenPool(8);
 
@@ -190,7 +191,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForConwipRunTwoStationDeterministicMachineWorkProcessAndLastWorkStationWithTwoMachines()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
 
             WipTokenPool wipLimit = new WipTokenPool(8);
 
@@ -219,7 +220,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForConwipRunPooledMachines()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
 
             WipTokenPool wipLimit = new WipTokenPool(8);
 
@@ -234,13 +235,13 @@ namespace MonteCarloFlowTest
 
             ResourcePool pool = new ResourcePool(3);
 
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
 
-            ws2.AddMachine(new PooledMachine(distribution2, pool));
-            ws2.AddMachine(new PooledMachine(distribution2, pool));
-            ws2.AddMachine(new PooledMachine(distribution2, pool));
+            ws2.AddMachine(new Machine(distribution2, pool));
+            ws2.AddMachine(new Machine(distribution2, pool));
+            ws2.AddMachine(new Machine(distribution2, pool));
 
             FlowTestHelper.TickAndAssert(process, 3, 0, 0, 0, 0);
             FlowTestHelper.TickAndAssert(process, 3, 0, 0, 0, 0);
@@ -256,7 +257,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForConwipHandleProcessingTimeOfZeroForPooledMachine()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
 
             WipTokenPool wipLimit = new WipTokenPool(5);
 
@@ -275,23 +276,23 @@ namespace MonteCarloFlowTest
 
             ResourcePool pool = new ResourcePool(2);
 
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
-            ws1.AddMachine(new PooledMachine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
+            ws1.AddMachine(new Machine(distribution1, pool));
 
-            ws2.AddMachine(new PooledMachine(distribution2, pool));
-            ws2.AddMachine(new PooledMachine(distribution2, pool));
-            ws2.AddMachine(new PooledMachine(distribution2, pool));
-            ws2.AddMachine(new PooledMachine(distribution3, pool));
-            ws2.AddMachine(new PooledMachine(distribution3, pool));
+            ws2.AddMachine(new Machine(distribution2, pool));
+            ws2.AddMachine(new Machine(distribution2, pool));
+            ws2.AddMachine(new Machine(distribution2, pool));
+            ws2.AddMachine(new Machine(distribution3, pool));
+            ws2.AddMachine(new Machine(distribution3, pool));
 
-            ws3.AddMachine(new PooledMachine(distribution4, pool));
-            ws3.AddMachine(new PooledMachine(distribution4, pool));
-            ws3.AddMachine(new PooledMachine(distribution4, pool));
-            ws3.AddMachine(new PooledMachine(distribution4, pool));
-            ws3.AddMachine(new PooledMachine(distribution4, pool));
+            ws3.AddMachine(new Machine(distribution4, pool));
+            ws3.AddMachine(new Machine(distribution4, pool));
+            ws3.AddMachine(new Machine(distribution4, pool));
+            ws3.AddMachine(new Machine(distribution4, pool));
+            ws3.AddMachine(new Machine(distribution4, pool));
 
             FlowTestHelper.TickAndAssert(process, 2, 0, 0, 0, 0, 0, 0);
             FlowTestHelper.TickAndAssert(process, 0, 0, 2, 0, 0, 0, 0);
@@ -305,7 +306,7 @@ namespace MonteCarloFlowTest
         [TestMethod]
         public void ShouldForConwipPreventExcessWipWhenFirstStationIsFaster()
         {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
+            WorkProcess process = new WorkProcess(new InfiniteBacklog());
 
             WipTokenPool wipLimit = new WipTokenPool(4);
             WorkStation ws1 = new WorkStation(wipLimit);
@@ -330,48 +331,11 @@ namespace MonteCarloFlowTest
             FlowTestHelper.TickAndAssert(process, 1, 2, 1, 0, 3);
             FlowTestHelper.TickAndAssert(process, 0, 3, 1, 0, 3);
 
-            List<WorkItem> completed = new List<WorkItem>(process.CompletedJobs);
+            List<WorkItem> completed = new List<WorkItem>(process.CompletedWorktems);
             Assert.AreEqual(3, completed[0].CycleTime);
             Assert.AreEqual(4, completed[1].CycleTime);
             Assert.AreEqual(5, completed[2].CycleTime);
 
         }
-
-        [TestMethod]
-        public void ShouldForConwipStopProcessingWhenAWorkStationIsStopped()
-        {
-            GeneralWorkProcess process = new GeneralWorkProcess(new InfiniteBacklog());
-
-            WipTokenPool wipLimit = new WipTokenPool(4);
-
-            WorkStation ws1 = new WorkStation(wipLimit);
-            WorkStation ws2 = new WorkStation(wipLimit);
-            WorkStation ws3 = new WorkStation(wipLimit);
-
-            process.Add(ws1);
-            process.Add(ws2);
-            process.Add(ws3);
-
-            IProbabilityDistribution distribution1 = new DeterministicDistribution(1);
-            IProbabilityDistribution distribution2 = new DeterministicDistribution(2);
-
-            ws1.AddMachine(new Machine(distribution1));
-            ws2.AddMachine(new Machine(distribution2));
-            ws2.AddMachine(new Machine(distribution2));
-            ws3.AddMachine(new Machine(distribution1));
-
-            process.Tick(7);
-            FlowTestHelper.TickAndAssert(process, 1, 0, 2, 0, 1, 0, 4);
-
-            ws3.Stop();
-            process.Tick(4);
-            FlowTestHelper.TickAndAssert(process, 0, 0, 0, 4, 0, 0, 5);
-
-            ws3.Start();
-            process.Tick(4);
-
-            FlowTestHelper.TickAndAssert(process, 1, 0, 2, 0, 1, 0, 9);
-        }
-
     }
 }

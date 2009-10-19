@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using Flow.ProbabilityDistribution;
 using MonteCarloFlowTest;
 using System.Threading;
+using Flow;
+using System.IO;
+using System.Xml;
 
 namespace MonteCarloFlow
 {
@@ -13,6 +17,12 @@ namespace MonteCarloFlow
     {
         private static void Main(string[] args)
         {
+            if(args.Length>0)
+            {
+                ImportSimulation(args[0]);
+                return;
+            }
+
             //RunMultiGammaDistribution();
 
 
@@ -27,7 +37,7 @@ namespace MonteCarloFlow
 
             int[] processingTimes = new int[] {20,40,10};
             int[] kanbanWips = new int[] { 2, 4, 1 };
-            int conwipWips = 6;
+            int conwipWips = 7;
 
             //IProbabilityDistribution sizeDistribution;
 
@@ -48,7 +58,7 @@ namespace MonteCarloFlow
             {
                 new DeterministicSpecialistProcessBuilder(),
                 new GeneralistAndSpecialistProcessBuilder(),
-                new GeneralistProcessBuilder() ,
+                new GeneralistProcessBuilder(),
                 new RandomSpecialistProcessBuilder(),
                 new SpecializedGeneralistProcessBuilder()
             }
@@ -77,6 +87,10 @@ namespace MonteCarloFlow
 
                 RunExperiment(sizeDistribution, builder, kanbanWips, conwipWips);
             }
+        }
+
+        private static void ImportSimulation(string path)
+        {
         }
 
         private static void RunMultiGammaDistribution()
@@ -175,11 +189,9 @@ namespace MonteCarloFlow
         private static void RunTracking(ProbabilityDistribution sizeDistribution,
                                         ThreeWorkstationProcessBuilder processBuilder, int[] kanbanWips)
         {
-            KanbanWorkProcess kanbanWorkProcess =
-                new KanbanWorkProcess(new RandomSizeInfiniteBacklog(sizeDistribution), 3);
-            processBuilder.Build(kanbanWorkProcess, GetWipLimits(kanbanWips));
-
-            kanbanWorkProcess.SetWorkstationWipLevels(kanbanWips);
+            WorkProcess kanbanWorkProcess =
+                new WorkProcess(new RandomSizeInfiniteBacklog(sizeDistribution));
+            processBuilder.Build(kanbanWorkProcess, GetWipTokens(kanbanWips));
 
             for (int i = 0; i < 20000; i++)
             {
@@ -190,19 +202,19 @@ namespace MonteCarloFlow
                     Console.Write("{0} {1} ", kanbanWorkProcess[j].InProcessCount,
                                   kanbanWorkProcess[j].CompletionQueueCount);
                 }
-                FlowMetrics metrics = FlowMetrics.CalculateMetrics(kanbanWorkProcess.CompletedJobs);
+                FlowMetrics metrics = FlowMetrics.CalculateMetrics(kanbanWorkProcess.CompletedWorktems);
                 Console.WriteLine("{0} {1:F6} {2:F2} {3:F2}", kanbanWorkProcess.CompletionQueueCount,
                                   metrics.AverageThroughput, metrics.AverageCycleTime, metrics.AverageWip);
             }
         }
 
-        private static WorkInProcessLimit[] GetWipLimits(int[] wips)
+        private static WipTokenPool[] GetWipTokens(int[] wips)
         {
-            List<WorkInProcessLimit> wipLimits = new List<WorkInProcessLimit>();
+            List<WipTokenPool> wipLimits = new List<WipTokenPool>();
 
             foreach (int wip in wips)
             {
-                wipLimits.Add(new WorkInProcessLimit(wip));
+                wipLimits.Add(new WipTokenPool(wip));
             }
 
             return wipLimits.ToArray();
@@ -222,24 +234,24 @@ namespace MonteCarloFlow
 
             while (run-- > 0)
             {
+                WipTokenPool conwipWipToken = new WipTokenPool(conwipWips);
+                WipTokenPool[] kanbanWipTokens = GetWipTokens(kanbanWips);
+                WipTokenPool[] conwipWipTokens = new WipTokenPool[] { conwipWipToken, conwipWipToken, conwipWipToken };
+
                 int seed = rnd.Next();
 
                 sizeDistribution.Seed = seed;
                 processBuilder.Seed = seed;
 
 
-                ConwipWorkProcess conwipWorkProcess =
-                    new ConwipWorkProcess(new RandomSizeInfiniteBacklog(sizeDistribution), conwipWips);
+                WorkProcess conwipWorkProcess =
+                    new WorkProcess(new RandomSizeInfiniteBacklog(sizeDistribution));
 
-                WorkInProcessLimit wipLimit = new WorkInProcessLimit(conwipWips);
+                processBuilder.Build(conwipWorkProcess, conwipWipTokens);
 
-                processBuilder.Build(conwipWorkProcess, new WorkInProcessLimit[] {wipLimit, wipLimit, wipLimit});
-
-                KanbanWorkProcess kanbanWorkProcess =
-                    new KanbanWorkProcess(new RandomSizeInfiniteBacklog(sizeDistribution), 3);
-                processBuilder.Build(kanbanWorkProcess, GetWipLimits(kanbanWips));
-
-                kanbanWorkProcess.SetWorkstationWipLevels(kanbanWips);
+                WorkProcess kanbanWorkProcess =
+                    new WorkProcess(new RandomSizeInfiniteBacklog(sizeDistribution));
+                processBuilder.Build(kanbanWorkProcess, kanbanWipTokens);
 
                 FlowMetrics conwipMetrics = RunProcess(conwipWorkProcess, seed);
                 FlowMetrics kanbanMetrics = RunProcess(kanbanWorkProcess, seed);
@@ -256,7 +268,7 @@ namespace MonteCarloFlow
         }
 
 
-        private static FlowMetrics RunProcess(IWorkProcess process, int seed)
+        private static FlowMetrics RunProcess(WorkProcess process, int seed)
         {
             process.Tick(200000);
             return CaclulateMetrics(process);
@@ -269,9 +281,9 @@ namespace MonteCarloFlow
                               metrics.AverageCycleTime, metrics.AverageWip, metrics.CycleTimeStdDev);
         }
 
-        private static FlowMetrics CaclulateMetrics(IWorkProcess process)
+        private static FlowMetrics CaclulateMetrics(WorkProcess process)
         {
-            CycleTimeRangeEnumerator enumerator = new CycleTimeRangeEnumerator(25000, 500000, process.CompletedJobs);
+            CycleTimeRangeEnumerator enumerator = new CycleTimeRangeEnumerator(25000, 500000, process.CompletedWorktems);
 
             return FlowMetrics.CalculateMetrics(enumerator);
         }

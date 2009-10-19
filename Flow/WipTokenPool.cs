@@ -1,13 +1,20 @@
-namespace MonteCarloFlowTest
+namespace Flow
 {
     public class WipTokenPool
     {
+        private readonly int _tokens;
         private int _availableTokens;
 
 
-        public WipTokenPool(int wipLimit)
+        public WipTokenPool(int tokenCount)
         {
-            _availableTokens = wipLimit;
+            _tokens = tokenCount;
+            _availableTokens = tokenCount;
+        }
+
+        public int WipTokens
+        {
+            get { return _tokens; }
         }
 
         public bool LockWipToken()

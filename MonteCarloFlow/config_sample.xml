@@ -1,37 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Process>
+<FlowSimulation name="Kanban. Generalists">
   <Run ticks="10000" skip="2000">
   </Run>
-  <WorkItems>
-    <SizeDistribution type="Deterministic" value="1" />
-  </WorkItems>
+  <WorkItemSource type="RandomSizeInfinteBacklog">
+    <WorkItemSize type="DeterministicDistribution" value="1" />
+  </WorkItemSource>
+  <WipTokenPools>
+    <WipTokenPool id="AnalysisWip" value="2"/>
+    <WipTokenPool   id="DevelopmentWip" value="4"/>
+    <WipTokenPool id="TestWip" value="1"/>
+  </WipTokenPools>
+  <ResourcePools>
+    <ResourcePool id="A" resourceCount="1"/>
+    <ResourcePool id="B" resourceCount="1"/>
+    <ResourcePool id="C" resourceCount="1"/>
+  </ResourcePools>
   <WorkStations>
     <WorkStation name="Analysis" wipLimitId="AnalysisWip">
-      <Processor id="A">
-        <ProcessingTime type="GammaDistribution" shape="" scale="" />
-      </Processor>
-      <Processor id="B">
-        <ProcessingTime type="GammaDistribution" shape="" scale="" />
-      </Processor>
-      <Processor id="C">
-        <ProcessingTime type="GammaDistribution" shape="" scale="" />
-      </Processor>
+      <Machines>
+        <Machine resourcePoolId="A">
+          <ProcessingTime type="GammaDistribution" shape="" scale="" />
+        </Machine>
+        <Machine resourcePoolId="B">
+          <ProcessingTime type="GammaDistribution" shape="" scale="" />
+        </Machine>
+        <Machine resourcePoolId="C">
+          <ProcessingTime type="GammaDistribution" shape="" scale="" />
+        </Machine>
+      </Machines>
     </WorkStation>
     <WorkStation name="Development" wipLimitId="DevelopmentWip">
-      <Processor id="A">
-        <ProcessingTime type="GammaDistribution" shape="" scale="" />
-      </Processor>
-      <Processor id="B">
-        <ProcessingTime type="GammaDistribution" shape="" scale="" />
-      </Processor>
-      <Processor id="C">
-        <ProcessingTime type="GammaDistribution" shape="" scale="" />
-      </Processor>
+      <Machines>
+        <Machine resourcePoolId="A">
+          <ProcessingTime type="GammaDistribution" shape="" scale="" />
+        </Machine>
+        <Machine resourcePoolId="B">
+          <ProcessingTime type="GammaDistribution" shape="" scale="" />
+        </Machine>
+        <Machine resourcePoolId="C">
+          <ProcessingTime type="GammaDistribution" shape="" scale="" />
+        </Machine>
+      </Machines>
     </WorkStation>
-    <WipLimits>
-      <WipLimit id="AnalysisWip" value="2"/>
-      <WipLimit id="DevelopmentWip" value="4"/>
-      <WipLimit id="TestWip" value="1"/>
-    </WipLimits>
   </WorkStations>
-</Process>
+</FlowSimulation>
+
+
+Workstation:WS1
+WS1.WipLimit=AnalysisWip
+WS1.Name=Analysis
+Machine:MA
+MA.ProcessingTime.Type=GammaDistribution
+MA.

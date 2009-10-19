@@ -80,24 +80,31 @@
 
   <object id="analyst1_rp" type="Flow.ResourcePool, Flow">
     <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Analyst 1"/>
   </object>
   <object id="analyst2_rp" type="Flow.ResourcePool, Flow">
     <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Analyst 2"/>
   </object>
   <object id="dev1_rp" type="Flow.ResourcePool, Flow">
     <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Developer 1"/>
   </object>
   <object id="dev2_rp" type="Flow.ResourcePool, Flow">
     <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Developer 2"/>
   </object>
   <object id="dev3_rp" type="Flow.ResourcePool, Flow">
     <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Developer 3"/>
   </object>
   <object id="dev4_rp" type="Flow.ResourcePool, Flow">
     <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Developer 4"/>
   </object>
   <object id="test1_rp" type="Flow.ResourcePool, Flow">
     <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Tester 1"/>
   </object>
 
   <object id="analyst1_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">

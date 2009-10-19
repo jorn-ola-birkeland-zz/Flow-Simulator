@@ -1,42 +1,49 @@
 using System;
+using Flow.ProbabilityDistribution;
+using MonteCarloFlowTest;
 
-namespace MonteCarloFlowTest
+namespace Flow
 {
-    public class Machine : IMachine
+    public class Machine 
     {
+        private readonly ResourcePool _pool;
         private readonly IProbabilityDistribution _distribution;
         private long _time;
         private long _utilizationTime;
         private long _completionTime;
         private WorkItem _workItem;
-        private bool _isRunning = true;
         private bool _complete;
 
-        public Machine(IProbabilityDistribution distribution)
+        public Machine(IProbabilityDistribution distribution) : this(distribution,new ResourcePool(1))
         {
+        }
+
+        public Machine(IProbabilityDistribution distribution, ResourcePool resourcePool) 
+        {
+            _pool = resourcePool;
             _distribution = distribution;
         }
 
         public bool IsProcessing
         {
-            get { return _workItem!=null && !_complete; }
+            get { return _workItem != null && !_complete; }
         }
 
         public bool HasCompletedJob
         {
-            get { return _workItem!=null && _complete; }
+            get { return _workItem != null && _complete; }
         }
 
         public bool IsIdle
         {
-            get { return _workItem==null && _isRunning && CanStart; }
+            get { return _workItem == null && _pool.HasResources; }
         }
 
 
         public void Tick()
         {
             _time++;
-            if(_workItem!=null)
+            if (_workItem != null)
             {
                 _workItem.Tick();
 
@@ -45,7 +52,7 @@ namespace MonteCarloFlowTest
                 if (!_complete && _time >= _completionTime)
                 {
                     _complete = true;
-                    OnJobCompletion();
+                    _pool.UnlockResource();
                 }
 
             }
@@ -55,8 +62,21 @@ namespace MonteCarloFlowTest
         {
             get
             {
-                return ((double) _utilizationTime)/_time;
+                return ((double)_utilizationTime) / _time;
             }
+        }
+
+        public ResourcePool ResourcePool
+        {
+            get
+            {
+                return _pool;
+            }
+        }
+
+        public double ExpectedProcessingTime
+        {
+            get { return _distribution.ExpectedValue; }
         }
 
         public WorkItem RemoveCompletedJob()
@@ -70,40 +90,11 @@ namespace MonteCarloFlowTest
         public void StartJob(WorkItem workItem)
         {
             _workItem = workItem;
-            long timeToCompletion = Convert.ToInt64(workItem.Size*_distribution.NextValue());
+            long timeToCompletion = Convert.ToInt64(workItem.Size * _distribution.NextValue());
             _completionTime = _time + timeToCompletion;
             _complete = false;
 
-            OnJobStart();
+            _pool.LockResource();
         }
-
-        public void Stop()
-        {
-            _isRunning = false;
-        }
-
-        public void Start()
-        {
-            _isRunning = true;
-        }
-
-        protected virtual bool CanStart
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        protected virtual void OnJobCompletion()
-        {
-
-        }
-
-        protected virtual void OnJobStart()
-        {
-            
-        }
-
     }
 }

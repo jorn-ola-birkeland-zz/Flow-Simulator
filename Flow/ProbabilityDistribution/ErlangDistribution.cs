@@ -23,6 +23,11 @@ namespace MonteCarloFlow
             }
         }
 
+        public override double ExpectedValue
+        {
+            get { return _k/_lambda; }
+        }
+
         public static ErlangDistribution FromExpectedValue(double expectedValue, int k)
         {
             double lambda = k / expectedValue;

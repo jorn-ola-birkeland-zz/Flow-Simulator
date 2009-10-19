@@ -1,4 +1,5 @@
-using MonteCarloFlowTest;
+using Flow;
+using Flow.ProbabilityDistribution;
 
 namespace MonteCarloFlow
 {
@@ -9,14 +10,21 @@ namespace MonteCarloFlow
             get { return string.Format("{0} specialist(s). Random processing times. {1} analyst(s), {2} tester(s), {3} developer(s)",TeamSize,AnalystCount,TesterCount,DeveloperCount); }
         }
 
-        protected override void BuildWorkstations(IWorkProcess process)
+        protected override void BuildWorkstations(WorkProcess process)
         {
+            //IProbabilityDistribution analyst =
+            //    ErlangDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(0), 5, Seed);
+            //IProbabilityDistribution dev =
+            //    ErlangDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(1), 5, Seed + 1);
+            //IProbabilityDistribution tester =
+            //    ErlangDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(2), 5, Seed + 2);
+
             IProbabilityDistribution analyst =
-                ErlangDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(0), 5, Seed);
+                ExponentialDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(0), Seed);
             IProbabilityDistribution dev =
-                ErlangDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(1), 5, Seed + 1);
+                ExponentialDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(1), Seed + 1);
             IProbabilityDistribution tester =
-                ErlangDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(2), 5, Seed + 2);
+                ExponentialDistribution.FromExpectedValue(GetExpectedProcessingTimeOfStation(2), Seed + 2);
 
             for (int i = 0; i < AnalystCount; i++)
             {

@@ -2,7 +2,7 @@
 using Flow.ProbabilityDistribution;
 using MonteCarloFlowTest;
 
-namespace MonteCarloFlow
+namespace Flow.ProbabilityDistribution
 {
     public class ExponentialDistribution : ProbabilityDistribution
     {
@@ -47,5 +47,9 @@ namespace MonteCarloFlow
             }
         }
 
+        public override double ExpectedValue
+        {
+            get { return 1.0/_lambda; }
+        }
     }
 }

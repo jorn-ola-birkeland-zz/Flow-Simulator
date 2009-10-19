@@ -1,7 +1,7 @@
 using Flow.ProbabilityDistribution;
 using System;
 
-namespace MonteCarloFlowTest
+namespace Flow.ProbabilityDistribution
 {
     public class DeterministicDistribution : ProbabilityDistribution
     {
@@ -22,5 +22,9 @@ namespace MonteCarloFlowTest
             get { return "Deterministic distribution. Value: " + _value; }
         }
 
+        public override double ExpectedValue
+        {
+            get { return _value; }
+        }
     }
 }

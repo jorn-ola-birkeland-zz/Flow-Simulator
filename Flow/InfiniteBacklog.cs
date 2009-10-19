@@ -1,3 +1,6 @@
+using Flow;
+using Wintellect.PowerCollections;
+
 namespace MonteCarloFlowTest
 {
     public class InfiniteBacklog : IWorkStation
@@ -7,11 +10,6 @@ namespace MonteCarloFlowTest
         public void Tick()
         {
             _time++;
-        }
-
-        public bool HasCapacity
-        {
-            get { return false; }
         }
 
         public bool HasFinishedJobs
@@ -24,16 +22,27 @@ namespace MonteCarloFlowTest
             get { return 0; }
         }
 
-        public void AddJob(WorkItem o)
+        public Set<ResourcePool> ResourcePools
         {
+            get { return new Set<ResourcePool>(); }
         }
 
-        public WorkItem RemoveFirstFinishedJob()
+        private WorkItem RemoveFirstFinishedJob()
         {
             WorkItem workItem = new WorkItem(_time);
 
             PrepareJob(workItem);
             return workItem;
+        }
+
+        public IWorkItemTransition BeginWorkItemTransition()
+        {
+            return new WorkItemTransition(RemoveFirstFinishedJob());
+        }
+
+        public bool TryAddWorkItem(IWorkItemTransition workItemTransition)
+        {
+            return false;
         }
 
         protected virtual void PrepareJob(WorkItem workItem)

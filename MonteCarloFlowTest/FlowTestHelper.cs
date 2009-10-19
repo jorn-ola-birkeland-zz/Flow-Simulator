@@ -1,4 +1,5 @@
 using System;
+using Flow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MonteCarloFlow;
 
@@ -6,12 +7,12 @@ namespace MonteCarloFlowTest
 {
     internal class FlowTestHelper
     {
-        public static void TickAndAssert(IWorkProcess process, params int[] expectedCounts)
+        public static void TickAndAssert(WorkProcess process, params int[] expectedCounts)
         {
             TickAndAssert(1,process,expectedCounts);
         }
 
-        public static void TickAndAssert(int ticks, IWorkProcess process, params int[] expectedCounts)
+        public static void TickAndAssert(int ticks, WorkProcess process, params int[] expectedCounts)
         {
             if (expectedCounts.Length % 2 != 1)
             {

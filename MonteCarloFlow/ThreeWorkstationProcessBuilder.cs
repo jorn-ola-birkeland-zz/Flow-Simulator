@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MonteCarloFlowTest;
+using Flow;
 
 namespace MonteCarloFlow
 {
@@ -19,7 +19,7 @@ namespace MonteCarloFlow
             _expectedProcessingTimes.Add(150);
         }
 
-        public void Build(IWorkProcess process, WorkInProcessLimit[] wipLimits)
+        public void Build(WorkProcess process, WipTokenPool[] wipLimits)
         {
             process.Add(new WorkStation(wipLimits[0]));
             process.Add(new WorkStation(wipLimits[1]));
@@ -40,7 +40,7 @@ namespace MonteCarloFlow
         }
 
         protected abstract string Description { get; }
-        protected abstract void BuildWorkstations(IWorkProcess process);
+        protected abstract void BuildWorkstations(WorkProcess process);
 
         protected double GetExpectedProcessingTimeOfStation(int index)
         {

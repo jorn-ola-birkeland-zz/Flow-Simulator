@@ -1,10 +1,11 @@
-using MonteCarloFlowTest;
+using Flow;
+using Flow.ProbabilityDistribution;
 
 namespace MonteCarloFlow
 {
     internal class DeterministicSpecialistProcessBuilder : ThreeWorkstationProcessBuilder
     {
-        protected override void BuildWorkstations(IWorkProcess process)
+        protected override void BuildWorkstations(WorkProcess process)
         {
             IProbabilityDistribution analyst = new DeterministicDistribution(GetExpectedProcessingTimeOfStation(0));
             IProbabilityDistribution dev = new DeterministicDistribution(GetExpectedProcessingTimeOfStation(1));

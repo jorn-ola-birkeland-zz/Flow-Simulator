@@ -71,93 +71,118 @@
 
   <object id="tm1.1" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="analyst_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp1"/>
   </object>
   <object id="tm2.1" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="analyst_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp2"/>
   </object>
   <object id="tm3.1" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="analyst_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp3"/>
   </object>
   <object id="tm4.1" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="analyst_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp4"/>
   </object>
   <object id="tm5.1" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="analyst_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp5"/>
   </object>
   <object id="tm6.1" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="analyst_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp6"/>
   </object>
   <object id="tm7.1" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="analyst_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp7"/>
   </object>
 
   <object id="tm1.2" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="dev_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp1"/>
   </object>
   <object id="tm2.2" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="dev_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp2"/>
   </object>
   <object id="tm3.2" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="dev_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp3"/>
   </object>
   <object id="tm4.2" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="dev_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp4"/>
   </object>
   <object id="tm5.2" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="dev_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp5"/>
   </object>
   <object id="tm6.2" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="dev_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp6"/>
   </object>
   <object id="tm7.2" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="dev_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp7"/>
   </object>
 
   <object id="tm1.3" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="test_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp1"/>
   </object>
   <object id="tm2.3" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="test_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp2"/>
   </object>
   <object id="tm3.3" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="test_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp3"/>
   </object>
   <object id="tm4.3" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="test_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp4"/>
   </object>
   <object id="tm5.3" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="test_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp5"/>
   </object>
   <object id="tm6.3" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="test_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp6"/>
   </object>
   <object id="tm7.3" type="Flow.Machine, Flow">
     <constructor-arg name="distribution" ref="test_dist"/>
-    <constructor-arg name="resourcePool" ref="rp"/>
+    <constructor-arg name="resourcePool" ref="rp7"/>
   </object>
 
-  <object id="rp" type="Flow.ResourcePool, Flow">
-    <constructor-arg name="numberOfResources" value="7"/>
+  <object id="rp1" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Generalist 1"/>
+  </object>
+  <object id="rp2" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Generalist 2"/>
+  </object>
+  <object id="rp3" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Generalist 3"/>
+  </object>
+  <object id="rp4" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Generalist 4"/>
+  </object>
+  <object id="rp5" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Generalist 5"/>
+  </object>
+  <object id="rp6" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Generalist 6"/>
+  </object>
+  <object id="rp7" type="Flow.ResourcePool, Flow">
+    <constructor-arg name="numberOfResources" value="1"/>
+    <constructor-arg name="name" value="Generalist 7"/>
   </object>
 
   <object id="analyst_dist" type="Flow.ProbabilityDistribution.ExponentialDistribution, Flow" factory-method="FromExpectedValue">

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\PowerCollections.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -45,17 +49,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConwipWorkProcess.cs" />
     <Compile Include="DoneQueue.cs" />
     <Compile Include="FlowMetrics.cs" />
-    <Compile Include="IMachine.cs" />
+    <Compile Include="IWorkItemTransition.cs" />
+    <Compile Include="Statistics.cs" />
+    <Compile Include="WipTokenPool.cs" />
+    <Compile Include="WorkItemTransition.cs" />
+    <Compile Include="WorkProcess.cs" />
     <Compile Include="InfiniteBacklog.cs" />
-    <Compile Include="IWorkProcess.cs" />
     <Compile Include="IWorkStation.cs" />
     <Compile Include="WorkItem.cs" />
-    <Compile Include="KanbanWorkProcess.cs" />
     <Compile Include="Machine.cs" />
-    <Compile Include="PooledMachine.cs" />
     <Compile Include="ProbabilityDistribution\DeterministicDistribution.cs" />
     <Compile Include="ProbabilityDistribution\ErlangDistribution.cs" />
     <Compile Include="ProbabilityDistribution\ExponentialDistribution.cs" />
@@ -67,7 +71,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomSizeInfiniteBacklog.cs" />
     <Compile Include="ResourcePool.cs" />
-    <Compile Include="WorkProcess.cs" />
     <Compile Include="WorkStation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

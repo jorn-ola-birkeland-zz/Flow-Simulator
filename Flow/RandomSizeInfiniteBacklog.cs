@@ -1,4 +1,7 @@
-namespace MonteCarloFlowTest
+using Flow.ProbabilityDistribution;
+using MonteCarloFlowTest;
+
+namespace Flow
 {
     public class RandomSizeInfiniteBacklog : InfiniteBacklog
     {

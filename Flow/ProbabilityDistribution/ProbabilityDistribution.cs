@@ -1,5 +1,4 @@
-﻿using MonteCarloFlowTest;
-using System;
+﻿using System;
 namespace Flow.ProbabilityDistribution
 {
     public abstract class ProbabilityDistribution : IProbabilityDistribution
@@ -37,6 +36,7 @@ namespace Flow.ProbabilityDistribution
             }
         }
 
+        public abstract double ExpectedValue { get;}
         protected abstract double NextValue(Random rnd);
         protected abstract string Description { get; }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Flow;
 using Flow.ProbabilityDistribution;
 using MonteCarloFlowTest;
 
@@ -11,7 +12,7 @@ namespace MonteCarloFlow
             get { return string.Format("{0} specialist(s). {1} analyst(s), {2} tester(s), {3} developer(s). Random processing time, with random mean",TeamSize, AnalystCount,TesterCount,DeveloperCount); }
         }
 
-        protected override void BuildWorkstations(IWorkProcess process)
+        protected override void BuildWorkstations(WorkProcess process)
         {
             List<ProbabilityDistribution> distributions = new List<ProbabilityDistribution>();
 
@@ -23,7 +24,8 @@ namespace MonteCarloFlow
 
                 UniformDistribution ud = new UniformDistribution(expectedProcessingTime - offset, expectedProcessingTime + offset, Seed); 
 
-                distributions.Add(ErlangDistribution.FromExpectedValue(ud.NextValue(),5,Seed+workstationIndex));
+                //distributions.Add(ErlangDistribution.FromExpectedValue(ud.NextValue(),5,Seed+workstationIndex));
+                distributions.Add(ExponentialDistribution.FromExpectedValue(ud.NextValue(), Seed + workstationIndex));
             }
 
             for (int i = 0; i < AnalystCount; i++)

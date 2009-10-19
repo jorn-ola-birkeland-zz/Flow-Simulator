@@ -1,16 +1,20 @@
-namespace MonteCarloFlowTest
+using System.Collections.Generic;
+using Flow;
+using MonteCarloFlowTest;
+using Wintellect.PowerCollections;
+
+namespace Flow
 {
     public interface IWorkStation
     {
         void Tick();
 
-        bool HasCapacity { get; }
-
         bool HasFinishedJobs { get; }
 
         int WorkInProcess { get; }
+        Set<ResourcePool> ResourcePools { get;}
 
-        void AddJob(WorkItem workItem);
-        WorkItem RemoveFirstFinishedJob();
+        IWorkItemTransition BeginWorkItemTransition();
+        bool TryAddWorkItem(IWorkItemTransition workItemTransition);
     }
 }
