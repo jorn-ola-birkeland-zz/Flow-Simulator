@@ -70,14 +70,6 @@
       <Name>Flow</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="conwip-generalists.xml" />
-    <Content Include="conwip-specialists.xml" />
-    <Content Include="conwip-tpeople.xml" />
-    <Content Include="kanban-tpeople.xml" />
-    <Content Include="kanban-generalists.xml" />
-    <Content Include="kanban-specialists.xml" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
