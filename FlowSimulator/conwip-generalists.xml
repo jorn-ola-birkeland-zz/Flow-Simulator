@@ -60,7 +60,7 @@
   </object>
 
   <object id="wip" type="Flow.WipTokenPool, Flow">
-    <constructor-arg name="tokenCount" value="6"/>
+    <constructor-arg name="tokenCount" value="7"/>
   </object>
 
   <object id="tm1.1" type="Flow.Machine, Flow">

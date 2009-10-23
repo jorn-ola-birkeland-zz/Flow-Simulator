@@ -24,12 +24,9 @@ namespace FlowSimulator
 
             IApplicationContext context = new XmlApplicationContext(path);
 
-            WorkProcess process = (WorkProcess) context.GetObject("process");
+            var process = (WorkProcess) context.GetObject("process");
 
             process.Tick(200000);
-
-            List<WorkItem> workItems = new List<WorkItem>(process.CompletedWorktems);
-
 
             IEnumerable<WorkItem> filteredWorkItems = process.CompletedWorktems.Where(wi => wi.StartTime > 25000);
             IEnumerable<WipEntry> filteredWipEntries = process.WipEntries.Where(we => we.TimeStamp > 25000);
@@ -42,7 +39,7 @@ namespace FlowSimulator
             WriteUtilization(filteredUtilizationEntries);
 
 
-            string title = "Cycle time histogram";
+            const string title = "Cycle time histogram";
             Console.WriteLine();
             Console.WriteLine(title);
             CreateHistogram(filteredWorkItems, wi => wi.CycleTime,50);
@@ -66,9 +63,9 @@ namespace FlowSimulator
 
         private static void WriteResourceUtilization(IEnumerable<UtilizationEntry> entries)
         {
-            MultiDictionary<string, double> utilizationEntries = GroupUtilizationEntries(entries);
+            var utilizationEntries = GroupUtilizationEntries(entries);
 
-            foreach (string key in utilizationEntries.Keys.OrderBy(key => key))
+            foreach (var key in utilizationEntries.Keys.OrderBy(key => key))
             {
                 Console.WriteLine();
                 Console.WriteLine(key);
@@ -79,8 +76,8 @@ namespace FlowSimulator
 
         private static MultiDictionary<string, double> GroupUtilizationEntries(IEnumerable<UtilizationEntry> entries)
         {
-            MultiDictionary<string, double> utilizationEntries = new MultiDictionary<string, double>(true);
-            foreach (UtilizationEntry entry in entries)
+            var utilizationEntries = new MultiDictionary<string, double>(true);
+            foreach (var entry in entries)
             {
                 utilizationEntries.Add(entry.ResourcePoolName, entry.Utilization);
             }
@@ -89,8 +86,8 @@ namespace FlowSimulator
 
         private static void WriteWip(IEnumerable<WipEntry> filteredWipEntries)
         {
-            double wipAvg = filteredWipEntries.Average(wipEntry => wipEntry.Wip);
-            double wipStdDev = filteredWipEntries.StandardDeviation(wipEntry => wipEntry.Wip);
+            var wipAvg = filteredWipEntries.Average(wipEntry => wipEntry.Wip);
+            var wipStdDev = filteredWipEntries.StandardDeviation(wipEntry => wipEntry.Wip);
 
             Console.WriteLine("Avg. WIP:           {0}", wipAvg);
             Console.WriteLine("WIP std.dev.:       {0}", wipStdDev);
@@ -106,7 +103,7 @@ namespace FlowSimulator
 
         private static void CreateHistogram<T>(IEnumerable<T> values, Converter<T,double> toDouble,  double incrementSize)
         {
-            Dictionary<double,int> categories = new Dictionary<double, int>();
+            var categories = new Dictionary<double, int>();
             double maxCategory = 0;
             int total = 0;
 

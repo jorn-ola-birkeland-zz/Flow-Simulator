@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E5239B6D-A2F1-4E28-AF8E-EC09B9CF86A7}</ProjectGuid>
+    <ProjectGuid>{105523E2-E7EF-4955-A392-A65F060BCF9D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonteCarloFlow</RootNamespace>
-    <AssemblyName>MonteCarloFlow</AssemblyName>
+    <RootNamespace>FlowSimulator</RootNamespace>
+    <AssemblyName>FlowSimulator</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\antlr.runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core, Version=1.1.2.20125, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Spring.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -45,15 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeterministicSpecialistProcessBuilder.cs" />
-    <Compile Include="GeneralistAndSpecialistProcessBuilder.cs" />
-    <Compile Include="GeneralistProcessBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomSpecialistProcessBuilder.cs" />
-    <Compile Include="SpecializedGeneralistProcessBuilder.cs" />
-    <Compile Include="ThreeWorkstationProcessBuilder.cs" />
-    <Compile Include="VariableSpecialistProcessBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Flow\Flow.csproj">
@@ -62,7 +71,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config_sample.xml" />
+    <Content Include="conwip-generalists.xml" />
+    <Content Include="conwip-specialists.xml" />
+    <Content Include="conwip-tpeople.xml" />
+    <Content Include="kanban-tpeople.xml" />
+    <Content Include="kanban-generalists.xml" />
+    <Content Include="kanban-specialists.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
